@@ -21,6 +21,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.9.0
+  flutter: ">=3.9.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -52,10 +53,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
-  uses-material-design: true
+  # This package is a Flutter package providing JSON-RPC bridge functionality.
+  
+  # Remove material design as it's not needed for a package
+  # uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

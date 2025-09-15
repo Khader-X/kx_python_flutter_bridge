@@ -1,0 +1,143 @@
+import 'package:flutter/material.dart';
+// Try direct import approach
+import 'package:kx_python_flutter_bridge/bridges/jsonrpc_bridge.dart';
+import 'package:kx_python_flutter_bridge/bridges/models.dart';
+
+/// Simple JSON-RPC Bridge Demo Screen - minimalistic version
+class JsonRpcBridgeDemo extends StatefulWidget {
+  const JsonRpcBridgeDemo({super.key});
+
+  @override
+  State<JsonRpcBridgeDemo> createState() => _JsonRpcBridgeDemoState();
+}
+
+class _JsonRpcBridgeDemoState extends State<JsonRpcBridgeDemo> {
+  String _result = 'Click the button to call Python';
+  bool _isLoading = false;
+  late JsonRpcBridge _bridge;
+
+  @override
+  void initState() {
+    super.initState();
+    _bridge = JsonRpcBridge();
+    // Auto-initialize bridge
+    _initializeBridge();
+  }
+
+  Future<void> _initializeBridge() async {
+    final success = await _bridge.start();
+    if (!success && mounted) {
+      setState(() {
+        _result = 'Failed to start bridge: ${_bridge.lastError}';
+      });
+    }
+  }
+
+  Future<void> _callPythonFunction() async {
+    setState(() {
+      _isLoading = true;
+      _result = 'Calling Python...';
+    });
+
+    try {
+      // Call a simple function - add_numbers with hardcoded values
+      final result = await _bridge.callFunction('add_numbers', {
+        'a': 5,
+        'b': 7,
+      });
+
+      setState(() {
+        _result = 'Python says: $result';
+      });
+    } catch (e) {
+      setState(() {
+        _result = 'Error: $e';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Simple Python Bridge'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            //////////////////////////
+            // What we are computing
+            //////////////////////////
+            Container(
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.black87,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Text(
+                '5 + 7',
+                style: TextStyle(fontSize: 24, color: Colors.cyanAccent),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            //////////////////////////
+            // Button to call Python function
+            //////////////////////////
+            ElevatedButton(
+              onPressed: _isLoading ? null : _callPythonFunction,
+              child: const Text('Call Python Function'),
+            ),
+            const SizedBox(height: 20),
+
+            //////////////////////////
+            // Display result or loading indicator
+            //////////////////////////
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            _result,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.cyanAccent,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        if (_isLoading) const SizedBox(width: 20),
+                        if (_isLoading)
+                          const CircularProgressIndicator(
+                            color: Colors.cyanAccent,
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

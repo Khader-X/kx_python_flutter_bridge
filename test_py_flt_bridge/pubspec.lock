@@ -80,7 +80,7 @@ packages:
     description:
       path: "flutter_package/kx_python_flutter_bridge"
       ref: HEAD
-      resolved-ref: "43c402f0e8f634f74571f375697981b4538fd365"
+      resolved-ref: ebe6d711d902d89217ed2fe1b1497c8b45c12139
       url: "https://github.com/Khader-X/kx_python_flutter_bridge.git"
     source: git
     version: "1.0.0+1"
