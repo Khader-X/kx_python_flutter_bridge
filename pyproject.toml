@@ -1,0 +1,53 @@
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kx_python_flutter_bridge"
+dynamic = ["version"]
+description = "Python-Flutter Bridge for seamless integration"
+authors = [
+    { name = "KhaderX Team", email = "contact@khaderx.com" }
+]
+maintainers = [
+    { name = "KhaderX Team", email = "contact@khaderx.com" }
+]
+keywords = ["keyword1", "keyword2", "keyword3"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+dependencies = [
+    "rich",
+]
+
+[project.urls]
+Homepage = "https://github.com/Khader-X/kx_python_flutter_bridge"
+Repository = "https://github.com/Khader-X/kx_python_flutter_bridge"
+"Bug Tracker" = "https://github.com/Khader-X/kx_python_flutter_bridge/issues"
+Website = "https://KhaderX.com/"
+Organization = "https://github.com/Khader-X"
+Author = "https://github.com/KhaderX-com"
+PyPI = "https://pypi.org/user/KhaderX/"
+Blog = "https://khaderabueltayef.blogspot.com/"
+Gravatar = "https://gravatar.com/voiddevotedlyf473f5471f"
+
+[project.optional-dependencies]
+dev = ["setuptools-scm"]
+
+[project.scripts]
+kx-bridge-server = "kx_python_flutter_bridge.jsonrpc_bridge:main"
+
+[tool.setuptools.packages.find]
+where = ["src/kx_python_flutter_bridge/python_package"]
+
+[tool.setuptools.dynamic]
+version = {attr = "kx_python_flutter_bridge.__version__"}
