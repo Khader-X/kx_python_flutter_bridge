@@ -317,6 +317,8 @@ class KXBridge {
     final projectRoot = _getProjectRoot();
     final scriptPath =
         '$projectRoot\\kx_python_flutter_bridge\\src\\kx_python_flutter_bridge\\jsonrpc_bridge.py';
+    debugPrint('📄 Script path: $scriptPath');
+    debugPrint('🔧 NEW PATH RESOLUTION CODE IS RUNNING!');
     return scriptPath;
   }
 
