@@ -39,7 +39,7 @@ dependencies:
   kx_python_flutter_bridge:
     git:
       url: https://github.com/Khader-X/kx_python_flutter_bridge.git
-      path: flutter_package/kx_python_flutter_bridge
+      path: src/kx_python_flutter_bridge
 
 dev_dependencies:
   flutter_test:

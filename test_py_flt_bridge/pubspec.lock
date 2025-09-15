@@ -78,9 +78,9 @@ packages:
   kx_python_flutter_bridge:
     dependency: "direct main"
     description:
-      path: "flutter_package/kx_python_flutter_bridge"
+      path: "src/kx_python_flutter_bridge"
       ref: HEAD
-      resolved-ref: b6ae3a92dc16e389286c49f997fd9d4dad5e02e1
+      resolved-ref: "6fbee4b693955f1ad312d22cf654daafbc129a58"
       url: "https://github.com/Khader-X/kx_python_flutter_bridge.git"
     source: git
     version: "1.0.0+1"
