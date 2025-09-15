@@ -35,7 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
-  # Add our custom kx_python_flutter_bridge package from GitHub
+  # Add our custom kx_python_flutter_bridge package from GitHub (full repo)
   kx_python_flutter_bridge:
     git:
       url: https://github.com/Khader-X/kx_python_flutter_bridge.git

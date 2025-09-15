@@ -32,6 +32,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  # Path manipulation utilities
+  path: ^1.8.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -55,3 +58,7 @@ dev_dependencies:
 flutter:
   # This package is a Flutter package providing JSON-RPC bridge functionality.
   uses-material-design: true
+  
+  # Include Python script assets
+  assets:
+    - assets/python/

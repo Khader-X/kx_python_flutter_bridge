@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
 import 'models.dart';
 
 /// Connection Status Enum
@@ -313,12 +314,80 @@ class KXBridge {
 
   /// Get path to Python JSON-RPC script
   String _getPythonScriptPath() {
-    // Get the project root and construct path to Python script
-    final projectRoot = _getProjectRoot();
-    final scriptPath =
-        '$projectRoot\\src\\kx_python_flutter_bridge\\jsonrpc_bridge.py';
-    debugPrint('📄 Script path: $scriptPath');
-    return scriptPath;
+    // Try different possible locations for the Python script
+    final possiblePaths = [
+      // Local development (from test app in same repo)
+      path.join(_getProjectRoot(), 'src', 'kx_python_flutter_bridge', 'jsonrpc_bridge.py'),
+      // From package assets (bundled approach)
+      path.join(_getProjectRoot(), 'flutter_package', 'kx_python_flutter_bridge', 'assets', 'python', 'jsonrpc_bridge.py'),
+      // Git dependency approach - look in pub cache structure
+      _findPythonScriptInPubCache(),
+    ];
+    
+    for (final scriptPath in possiblePaths) {
+      if (scriptPath.isNotEmpty && File(scriptPath).existsSync()) {
+        debugPrint('📄 Found script at: $scriptPath');
+        return scriptPath;
+      }
+    }
+    
+    // Fallback - use bundled assets
+    final fallbackPath = path.join(_getProjectRoot(), 'flutter_package', 'kx_python_flutter_bridge', 'assets', 'python', 'jsonrpc_bridge.py');
+    debugPrint('📄 Using fallback script path: $fallbackPath');
+    return fallbackPath;
+  }
+
+  /// Find Python script in Flutter pub cache when installed as git dependency  
+  String _findPythonScriptInPubCache() {
+    try {
+      // Get current working directory and navigate up to find .dart_tool
+      var currentDir = Directory.current;
+      
+      // Look for .dart_tool directory (where pub cache info is stored)
+      while (currentDir.path != currentDir.parent.path) {
+        final dartToolDir = Directory(path.join(currentDir.path, '.dart_tool'));
+        if (dartToolDir.existsSync()) {
+          // Look for package_config.json to find where our package is cached
+          final packageConfigFile = File(path.join(dartToolDir.path, 'package_config.json'));
+          if (packageConfigFile.existsSync()) {
+            final configContent = packageConfigFile.readAsStringSync();
+            final config = json.decode(configContent);
+            
+            // Find our package in the config
+            if (config['packages'] is List) {
+              for (final pkg in config['packages']) {
+                if (pkg['name'] == 'kx_python_flutter_bridge') {
+                  String packageRoot = pkg['rootUri'].toString();
+                  if (packageRoot.startsWith('file://')) {
+                    packageRoot = packageRoot.substring(7); // Remove 'file://'
+                  }
+                  
+                  // Convert relative URI to absolute path
+                  if (!path.isAbsolute(packageRoot)) {
+                    packageRoot = path.normalize(path.join(dartToolDir.path, packageRoot));
+                  }
+                  
+                  // Look for Python script in the git repo structure
+                  final scriptPath = path.join(packageRoot, '..', '..', 'src', 'kx_python_flutter_bridge', 'jsonrpc_bridge.py');
+                  final normalizedPath = path.normalize(scriptPath);
+                  
+                  if (File(normalizedPath).existsSync()) {
+                    debugPrint('📄 Found script in pub cache: $normalizedPath');
+                    return normalizedPath;
+                  }
+                }
+              }
+            }
+          }
+          break;
+        }
+        currentDir = currentDir.parent;
+      }
+    } catch (e) {
+      debugPrint('⚠️ Error searching pub cache: $e');
+    }
+    
+    return ''; // Return empty if not found
   }
 
   /// Get path to Python executable in virtual environment
