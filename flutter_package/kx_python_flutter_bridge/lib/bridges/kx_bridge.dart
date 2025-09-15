@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 import 'models.dart';
 
@@ -44,7 +45,7 @@ class KXBridge {
 
       // Get the paths to Python executable and script
       final pythonPath = _getPythonExecutablePath();
-      final scriptPath = _getPythonScriptPath();
+      final scriptPath = await _getPythonScriptPath();
       debugPrint('🐍 Python executable: $pythonPath');
       debugPrint('📄 Script path: $scriptPath');
 
@@ -313,37 +314,55 @@ class KXBridge {
   }
 
   /// Get path to Python JSON-RPC script
-  String _getPythonScriptPath() {
-    // Try different possible locations for the Python script
-    final possiblePaths = [
-      // Local development (from test app in same repo)
-      path.join(
-        _getProjectRoot(),
-        'src',
-        'kx_python_flutter_bridge',
-        'jsonrpc_bridge.py',
-      ),
-      // From package assets (bundled approach)
-      path.join(
-        _getProjectRoot(),
-        'flutter_package',
-        'kx_python_flutter_bridge',
-        'assets',
-        'python',
-        'jsonrpc_bridge.py',
-      ),
-      // Git dependency approach - look in pub cache structure
-      _findPythonScriptInPubCache(),
-    ];
-
-    for (final scriptPath in possiblePaths) {
-      if (scriptPath.isNotEmpty && File(scriptPath).existsSync()) {
-        debugPrint('📄 Found script at: $scriptPath');
-        return scriptPath;
-      }
+  Future<String> _getPythonScriptPath() async {
+    // Try different possible locations for the Python script in order
+    
+    // 1. Local development (from test app in same repo)
+    final localDevPath = path.join(
+      _getProjectRoot(),
+      'src',
+      'kx_python_flutter_bridge',
+      'jsonrpc_bridge.py',
+    );
+    if (File(localDevPath).existsSync()) {
+      debugPrint('📄 Found script at: $localDevPath');
+      return localDevPath;
     }
 
-    // Fallback - use bundled assets
+    // 2. From package assets (bundled approach)
+    final assetPath = path.join(
+      _getProjectRoot(),
+      'flutter_package',
+      'kx_python_flutter_bridge',
+      'assets',
+      'python',
+      'jsonrpc_bridge.py',
+    );
+    if (File(assetPath).existsSync()) {
+      debugPrint('📄 Found script at: $assetPath');
+      return assetPath;
+    }
+
+    // 3. Git dependency approach - look in pub cache structure
+    final pubCachePath = _findPythonScriptInPubCache();
+    if (pubCachePath.isNotEmpty && File(pubCachePath).existsSync()) {
+      debugPrint('📄 Found script at: $pubCachePath');
+      return pubCachePath;
+    }
+
+    // 4. Extract from bundled assets as fallback
+    try {
+      final tempDir = Directory.systemTemp.createTempSync('kx_bridge_');
+      final tempScriptPath = await _extractPythonAssets(tempDir.path);
+      if (tempScriptPath.isNotEmpty && File(tempScriptPath).existsSync()) {
+        debugPrint('📄 Using extracted assets at: $tempScriptPath');
+        return tempScriptPath;
+      }
+    } catch (e) {
+      debugPrint('⚠️ Failed to extract assets: $e');
+    }
+
+    // Final fallback - use bundled assets path
     final fallbackPath = path.join(
       _getProjectRoot(),
       'flutter_package',
@@ -354,6 +373,41 @@ class KXBridge {
     );
     debugPrint('📄 Using fallback script path: $fallbackPath');
     return fallbackPath;
+  }
+
+  /// Extract Python assets to temporary directory
+  Future<String> _extractPythonAssets(String tempDir) async {
+    try {
+      // Extract main script
+      final mainScript = await rootBundle.loadString(
+        'packages/kx_python_flutter_bridge/assets/python/jsonrpc_bridge.py',
+      );
+      final mainScriptPath = path.join(tempDir, 'jsonrpc_bridge.py');
+      await File(mainScriptPath).writeAsString(mainScript);
+
+      // Create jsonrpc directory
+      final jsonrpcDir = Directory(path.join(tempDir, 'jsonrpc'));
+      await jsonrpcDir.create();
+
+      // Extract jsonrpc module files
+      final jsonrpcFiles = ['__init__.py', 'server.py', 'protocol.py', 'function_registry.py'];
+      for (final fileName in jsonrpcFiles) {
+        try {
+          final content = await rootBundle.loadString(
+            'packages/kx_python_flutter_bridge/assets/python/jsonrpc/$fileName',
+          );
+          final filePath = path.join(jsonrpcDir.path, fileName);
+          await File(filePath).writeAsString(content);
+        } catch (e) {
+          debugPrint('⚠️ Failed to extract $fileName: $e');
+        }
+      }
+
+      return mainScriptPath;
+    } catch (e) {
+      debugPrint('⚠️ Asset extraction failed: $e');
+      return '';
+    }
   }
 
   /// Find Python script in Flutter pub cache when installed as git dependency
