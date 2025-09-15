@@ -316,14 +316,14 @@ class KXBridge {
     // Get the project root and construct path to Python script
     final projectRoot = _getProjectRoot();
     final scriptPath =
-        '$projectRoot\\src\\kx_python_flutter_bridge\\jsonrpc_bridge.py';
+        '$projectRoot\\kx_python_flutter_bridge\\src\\kx_python_flutter_bridge\\jsonrpc_bridge.py';
     return scriptPath;
   }
 
   /// Get path to Python executable in virtual environment
   String _getPythonExecutablePath() {
     final projectRoot = _getProjectRoot();
-    final pythonPath = '$projectRoot\\.venv\\Scripts\\python.exe';
+    final pythonPath = '$projectRoot\\kx_python_flutter_bridge\\.venv\\Scripts\\python.exe';
 
     // Check if virtual environment Python exists
     if (File(pythonPath).existsSync()) {
@@ -341,8 +341,9 @@ class KXBridge {
   String _getProjectRoot() {
     final currentDir = Directory.current.path;
 
-    // Navigate up from flutter_ui/test_py_flt_bridge to project root
-    final projectRoot = '$currentDir\\..\\..';
+    // The Flutter app is running from test_py_flt_bridge
+    // We need to go up one level to get to kx_python_flutter_bridge root
+    final projectRoot = '$currentDir\\..';
     final resolvedRoot = Directory(projectRoot).resolveSymbolicLinksSync();
 
     debugPrint('📁 Project root: $resolvedRoot');
