@@ -23,7 +23,7 @@ class ParameterInfo:
 
 @dataclass
 class FunctionInfo:
-    """Information about a discoverable function."""
+    """Information about a kx_bridge function."""
 
     name: str
     description: str
@@ -33,7 +33,7 @@ class FunctionInfo:
 
 
 class FunctionRegistry:
-    """Registry for discoverable Python functions."""
+    """Registry for kx_bridge Python functions."""
 
     def __init__(self):
         self._functions: Dict[str, Callable] = {}
@@ -147,8 +147,8 @@ class FunctionRegistry:
 registry = FunctionRegistry()
 
 
-def discoverable(category: str = "general"):
-    """Decorator to mark functions as discoverable."""
+def KX_Bridge(category: str = "general"):
+    """Decorator to mark functions as kx_bridge."""
 
     def decorator(func: Callable) -> Callable:
         registry.register(func, category)
@@ -158,25 +158,25 @@ def discoverable(category: str = "general"):
 
 
 # Example functions for testing
-@discoverable(category="math")
+@KX_Bridge(category="math")
 def add_numbers(a: float, b: float) -> float:
     """Add two numbers together."""
     return a + b
 
 
-@discoverable(category="math")
+@KX_Bridge(category="math")
 def multiply_numbers(a: float, b: float = 1.0) -> float:
     """Multiply two numbers together."""
     return a * b
 
 
-@discoverable(category="text")
+@KX_Bridge(category="text")
 def reverse_string(text: str) -> str:
     """Reverse a string."""
     return text[::-1]
 
 
-@discoverable(category="data")
+@KX_Bridge(category="data")
 def calculate_average(numbers: List[float]) -> float:
     """Calculate the average of a list of numbers."""
     if not numbers:
