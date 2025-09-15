@@ -25,6 +25,12 @@ class KXBridge {
   String get lastError => _lastError;
   Stream<BridgeStatus> get statusStream => _statusController.stream;
 
+  /// Initialize the KX Bridge - alias for start() method
+  /// This method provides a more semantic name for initialization
+  Future<bool> init() async {
+    return await start();
+  }
+
   /// Start the Python JSON-RPC bridge
   Future<bool> start() async {
     if (_status == BridgeStatus.connected) {
