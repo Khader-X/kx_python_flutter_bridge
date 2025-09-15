@@ -318,15 +318,13 @@ class KXBridge {
     final scriptPath =
         '$projectRoot\\src\\kx_python_flutter_bridge\\jsonrpc_bridge.py';
     debugPrint('📄 Script path: $scriptPath');
-    debugPrint('🔧 NEW PATH RESOLUTION CODE IS RUNNING!');
     return scriptPath;
   }
 
   /// Get path to Python executable in virtual environment
   String _getPythonExecutablePath() {
     final projectRoot = _getProjectRoot();
-    final pythonPath =
-        '$projectRoot\\.venv\\Scripts\\python.exe';
+    final pythonPath = '$projectRoot\\.venv\\Scripts\\python.exe';
 
     // Check if virtual environment Python exists
     if (File(pythonPath).existsSync()) {
