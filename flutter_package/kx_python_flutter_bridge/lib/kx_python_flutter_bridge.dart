@@ -1,4 +1,4 @@
-library kx_python_flutter_bridge;
+library;
 
 // Export all public APIs
 export 'bridges/jsonrpc_bridge.dart';
