@@ -12,21 +12,22 @@ class KXBridgeDemo extends StatefulWidget {
 class _KXBridgeDemoState extends State<KXBridgeDemo> {
   String _result = 'Click the button to call Python';
   bool _isLoading = false;
-  late KXBridge _bridge;
 
   @override
   void initState() {
     super.initState();
-    _bridge = KXBridge();
-    // Auto-initialize bridge
-    _initializeBridge();
+    // Bridge is already initialized in main(), just check status
+    _checkBridgeStatus();
   }
 
-  Future<void> _initializeBridge() async {
-    final success = await _bridge.start();
-    if (!success && mounted) {
+  void _checkBridgeStatus() {
+    if (kxBridge.status != BridgeStatus.connected) {
       setState(() {
-        _result = 'Failed to start bridge: ${_bridge.lastError}';
+        _result = 'Bridge not ready: ${kxBridge.lastError}';
+      });
+    } else {
+      setState(() {
+        _result = 'Bridge ready! Click button to call Python';
       });
     }
   }
@@ -39,7 +40,7 @@ class _KXBridgeDemoState extends State<KXBridgeDemo> {
 
     try {
       // Call a simple function - add_numbers with hardcoded values
-      final result = await _bridge.callFunction('add_numbers', {
+      final result = await kxBridge.callFunction('add_numbers', {
         'a': 5,
         'b': 7,
       });
