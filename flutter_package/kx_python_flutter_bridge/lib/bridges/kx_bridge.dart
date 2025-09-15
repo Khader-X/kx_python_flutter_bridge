@@ -323,7 +323,8 @@ class KXBridge {
   /// Get path to Python executable in virtual environment
   String _getPythonExecutablePath() {
     final projectRoot = _getProjectRoot();
-    final pythonPath = '$projectRoot\\kx_python_flutter_bridge\\.venv\\Scripts\\python.exe';
+    final pythonPath =
+        '$projectRoot\\kx_python_flutter_bridge\\.venv\\Scripts\\python.exe';
 
     // Check if virtual environment Python exists
     if (File(pythonPath).existsSync()) {
