@@ -316,7 +316,7 @@ class KXBridge {
   /// Get path to Python JSON-RPC script
   Future<String> _getPythonScriptPath() async {
     // Try different possible locations for the Python script in order
-    
+
     // 1. Local development (from test app in same repo)
     final localDevPath = path.join(
       _getProjectRoot(),
@@ -390,7 +390,12 @@ class KXBridge {
       await jsonrpcDir.create();
 
       // Extract jsonrpc module files
-      final jsonrpcFiles = ['__init__.py', 'server.py', 'protocol.py', 'function_registry.py'];
+      final jsonrpcFiles = [
+        '__init__.py',
+        'server.py',
+        'protocol.py',
+        'function_registry.py',
+      ];
       for (final fileName in jsonrpcFiles) {
         try {
           final content = await rootBundle.loadString(
