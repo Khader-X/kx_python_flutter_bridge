@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 
 /// Entry point of the Flutter desktop app.
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize the Flutter-Python bridge here:
+  // await kxBridge.init();
+
   runApp(const MyApp());
 }
 
