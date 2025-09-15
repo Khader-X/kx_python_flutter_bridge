@@ -217,14 +217,7 @@ class _KXBridgeDemoState extends State<KXBridgeDemo> {
 
       setState(() {
         _result =
-            'Available functions (${functions.length}):\n' +
-            functions.entries
-                .take(10)
-                .map((e) => '• ${e.key} (${e.value['category']})')
-                .join('\n') +
-            (functions.length > 10
-                ? '\n... and ${functions.length - 10} more'
-                : '');
+            'Available functions (${functions.length}):\n${functions.entries.take(10).map((e) => '• ${e.key} (${e.value['category']})').join('\n')}${functions.length > 10 ? '\n... and ${functions.length - 10} more' : ''}';
       });
     } catch (e) {
       setState(() {
@@ -269,7 +262,7 @@ class _KXBridgeDemoState extends State<KXBridgeDemo> {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      value: _selectedFunction,
+                      initialValue: _selectedFunction,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(

@@ -61,5 +61,5 @@ flutter:
 
   # Assets bundled with the package
   assets:
-    - assets/python/
-    - assets/python/jsonrpc/
+    - python_package/
+    - python_package/kx_python_flutter_bridge/jsonrpc/
