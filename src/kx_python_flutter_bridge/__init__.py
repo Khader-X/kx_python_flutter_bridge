@@ -13,12 +13,15 @@ Usage:
 """
 
 # Import version
-from .__version__ import __version__
+from .python_package.kx_python_flutter_bridge.__version__ import __version__
 
 # Import the decorator and main components for easy access
-from .jsonrpc.function_registry import KX_Bridge, registry
-from .jsonrpc.server import JsonRpcServer
-from .jsonrpc.protocol import (
+from .python_package.kx_python_flutter_bridge.jsonrpc.function_registry import (
+    KX_Bridge,
+    registry,
+)
+from .python_package.kx_python_flutter_bridge.jsonrpc.server import JsonRpcServer
+from .python_package.kx_python_flutter_bridge.jsonrpc.protocol import (
     JsonRpcRequest,
     JsonRpcResponse,
     JsonRpcErrorResponse,
