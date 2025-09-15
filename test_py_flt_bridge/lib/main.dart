@@ -7,7 +7,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize the Flutter-Python bridge here:
-  await kxBridge.init();
+  debugPrint('🚀 Initializing KX Bridge...');
+  final success = await kxBridge.init();
+  if (success) {
+    debugPrint('✅ KX Bridge initialized successfully!');
+  } else {
+    debugPrint('❌ KX Bridge initialization failed: ${kxBridge.lastError}');
+  }
 
   runApp(const MyApp());
 }
