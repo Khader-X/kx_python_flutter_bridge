@@ -32,7 +32,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+
   # Path manipulation utilities
   path: ^1.8.0
 
@@ -58,7 +58,7 @@ dev_dependencies:
 flutter:
   # This package is a Flutter package providing JSON-RPC bridge functionality.
   uses-material-design: true
-  
+
   # Include Python script assets
   assets:
     - assets/python/
