@@ -54,3 +54,4 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   # This package is a Flutter package providing JSON-RPC bridge functionality.
+  uses-material-design: true

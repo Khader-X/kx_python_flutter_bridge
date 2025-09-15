@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-// Try direct import approach
-import 'package:kx_python_flutter_bridge/bridges/jsonrpc_bridge.dart';
-import 'package:kx_python_flutter_bridge/bridges/models.dart';
+import 'package:kx_python_flutter_bridge/kx_python_flutter_bridge.dart';
 
 /// Simple JSON-RPC Bridge Demo Screen - minimalistic version
 class JsonRpcBridgeDemo extends StatefulWidget {
