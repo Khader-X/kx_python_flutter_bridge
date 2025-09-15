@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/jsonrpc_bridge_demo.dart';
+import 'home_page.dart';
 
 /// Entry point of the Flutter desktop app.
 void main() {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,
       theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
-      home: const JsonRpcBridgeDemo(),
+      home: const HomePage(),
     );
   }
 }

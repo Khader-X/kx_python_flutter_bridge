@@ -8,8 +8,8 @@ import 'models.dart';
 /// Connection Status Enum
 enum BridgeStatus { disconnected, connecting, connected, error }
 
-/// JSON-RPC Bridge Client for Python Communication
-class JsonRpcBridge {
+/// KX Bridge Client for Python Communication
+class KXBridge {
   Process? _process;
   BridgeStatus _status = BridgeStatus.disconnected;
   String _lastError = '';
@@ -351,4 +351,4 @@ class JsonRpcBridge {
 }
 
 /// Singleton instance
-final jsonRpcBridge = JsonRpcBridge();
+final kxBridge = KXBridge();

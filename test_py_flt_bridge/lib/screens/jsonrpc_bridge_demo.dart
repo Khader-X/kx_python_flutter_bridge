@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:kx_python_flutter_bridge/kx_python_flutter_bridge.dart';
 
 /// Simple JSON-RPC Bridge Demo Screen - minimalistic version
-class JsonRpcBridgeDemo extends StatefulWidget {
-  const JsonRpcBridgeDemo({super.key});
+class KXBridgeDemo extends StatefulWidget {
+  const KXBridgeDemo({super.key});
 
   @override
-  State<JsonRpcBridgeDemo> createState() => _JsonRpcBridgeDemoState();
+  State<KXBridgeDemo> createState() => _KXBridgeDemoState();
 }
 
-class _JsonRpcBridgeDemoState extends State<JsonRpcBridgeDemo> {
+class _KXBridgeDemoState extends State<KXBridgeDemo> {
   String _result = 'Click the button to call Python';
   bool _isLoading = false;
-  late JsonRpcBridge _bridge;
+  late KXBridge _bridge;
 
   @override
   void initState() {
     super.initState();
-    _bridge = JsonRpcBridge();
+    _bridge = KXBridge();
     // Auto-initialize bridge
     _initializeBridge();
   }

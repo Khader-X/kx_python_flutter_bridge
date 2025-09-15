@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Flutter-Python Bridge')),
-      body: Center(child: JsonRpcBridgeDemo()),
+      body: Center(child: KXBridgeDemo()),
     );
   }
 }
