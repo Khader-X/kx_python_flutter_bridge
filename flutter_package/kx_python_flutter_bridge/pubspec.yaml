@@ -58,7 +58,3 @@ dev_dependencies:
 flutter:
   # This package is a Flutter package providing JSON-RPC bridge functionality.
   uses-material-design: true
-
-  # Include Python script assets
-  assets:
-    - assets/python/
